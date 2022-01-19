@@ -2,6 +2,8 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use Laravel\Socialite\Facades\Socialite;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -15,4 +17,17 @@
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
+});
+
+// TODO
+$router->group(['prefix' => 'auth'], function () use ($router) {
+
+    $router->get('/facebook/redirect', function () {
+        return Socialite::driver('facebook')->stateless()->redirect();
+    });
+
+    $router->get('/facebook/callback', function () {
+        $user = Socialite::driver('facebook')->stateless()->user();
+        dd($user);
+    });
 });
